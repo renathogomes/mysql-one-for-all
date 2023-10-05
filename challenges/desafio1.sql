@@ -119,7 +119,6 @@ INSERT INTO SpotifyClone.seguidor (usuario_id, artista_id)
     (7, 6),
     (9, 3),
     (10, 2);
-
 INSERT INTO SpotifyClone.historico (usuario_id, cancao_id, data_reproducao)
 VALUES 
     (1, 8, '2022-02-28 10:45:55'),
