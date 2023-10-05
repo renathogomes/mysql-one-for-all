@@ -1,4 +1,4 @@
--- DROP DATABASE IF EXISTS SpotifyClone;
+DROP DATABASE IF EXISTS SpotifyClone;
 CREATE DATABASE IF NOT EXISTS SpotifyClone;
 
 CREATE TABLE SpotifyClone.planos(
@@ -9,7 +9,7 @@ CREATE TABLE SpotifyClone.planos(
 
 CREATE TABLE SpotifyClone.usuarios(
     usuario_id INT PRIMARY KEY AUTO_INCREMENT,
-    usuario_nome VARCHAR(50) NOT NULL,
+    usuario_nome VARCHAR(50) NOT NULL UNIQUE,
     usuario_idade INT NOT NULL,
     plano_id INT NOT NULL,
     FOREIGN KEY (plano_id) REFERENCES SpotifyClone.planos(plano_id),
@@ -18,19 +18,19 @@ CREATE TABLE SpotifyClone.usuarios(
 
 CREATE TABLE SpotifyClone.artistas(
     artista_id INT PRIMARY KEY AUTO_INCREMENT,
-    artista_nome VARCHAR(50) NOT NULL
+    artista_nome VARCHAR(50) NOT NULL UNIQUE
 ) engine = InnoDB;
 
 CREATE TABLE SpotifyClone.album(
     album_id INT PRIMARY KEY AUTO_INCREMENT,
-    album_nome VARCHAR(50) NOT NULL,
+    album_nome VARCHAR(50) NOT NULL UNIQUE,
     artista_id INT NOT NULL,
     FOREIGN KEY (artista_id) REFERENCES SpotifyClone.artistas(artista_id)
 ) engine = InnoDB;
 
 CREATE TABLE SpotifyClone.cancoes(
     cancao_id INT PRIMARY KEY AUTO_INCREMENT,
-    cancao_nome VARCHAR(50) NOT NULL,
+    cancao_nome VARCHAR(50) NOT NULL UNIQUE,
     album_id INT NOT NULL,
     FOREIGN KEY (album_id) REFERENCES SpotifyClone.album(album_id),
     ano_lancamento INT NOT NULL,
@@ -42,7 +42,8 @@ CREATE TABLE SpotifyClone.seguidor(
     usuario_id INT NOT NULL,
     artista_id INT,
     FOREIGN KEY (usuario_id) REFERENCES SpotifyClone.usuarios(usuario_id),
-    FOREIGN KEY (artista_id) REFERENCES SpotifyClone.artistas(artista_id)
+    FOREIGN KEY (artista_id) REFERENCES SpotifyClone.artistas(artista_id),
+    UNIQUE KEY (usuario_id, artista_id)
 ) engine = InnoDB;
 
 CREATE TABLE SpotifyClone.historico(
@@ -51,7 +52,8 @@ CREATE TABLE SpotifyClone.historico(
     cancao_id INT NOT NULL,
     FOREIGN KEY (usuario_id) REFERENCES SpotifyClone.usuarios(usuario_id),
     FOREIGN KEY (cancao_id) REFERENCES SpotifyClone.cancoes(cancao_id),
-    data_reproducao DATE NOT NULL
+    data_reproducao DATE NOT NULL,
+    UNIQUE KEY (usuario_id, cancao_id)
 ) engine = InnoDB;
 
 INSERT INTO SpotifyClone.planos (plano_id, plano_nome, plano_preco)
@@ -115,7 +117,6 @@ INSERT INTO SpotifyClone.seguidor (usuario_id, artista_id)
     (6, 6),
     (6, 1),
     (7, 6),
-    (8, NULL),
     (9, 3),
     (10, 2);
 
@@ -137,4 +138,3 @@ VALUES
     (8, 4, '2012-03-17 14:56:41'),
     (9, 9, '2022-02-24 21:14:22'),
     (10, 3, '2015-12-13 08:30:22');
-```
